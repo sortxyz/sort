@@ -32,7 +32,6 @@ const configSchema = Type.Object({
   TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING: Type.Optional(Type.String()),
   TEST_SNOWFLAKE_HYBRID_USER: Type.Optional(Type.String()),
   TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING: Type.Optional(Type.String()),
-  TEST_SNOWFLAKE_V4A_CONNECTION_STRING: Type.Optional(Type.String()),
   TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING: Type.Optional(Type.String())
 })
 
@@ -92,13 +91,6 @@ const postEnvLoad = (env: Record<string, unknown>) => {
       throw new Error(
         'Missing env var: TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING\n' +
           'Hint: create a .env.test file in the root of this package (packages/shared) and add TEST_SNOWFLAKE_HYBRID_PASSWORD=... to it.'
-      )
-    }
-
-    if (!env.TEST_SNOWFLAKE_V4A_CONNECTION_STRING) {
-      throw new Error(
-        'Missing env var: TEST_SNOWFLAKE_V4A_CONNECTION_STRING\n' +
-          'Hint: create a .env.test file in the root of this package (packages/shared) and add TEST_SNOWFLAKE_V4A_CONNECTION_STRING=... to it.'
       )
     }
 

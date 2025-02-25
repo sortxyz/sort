@@ -1,4 +1,4 @@
-import { createKysely, disconnectKysely, getConfig, getDb } from '../../../'
+import { createKysely, disconnectKysely, getDb } from '../../../'
 import { uuidFormat } from '../../../constants/type-mask.constant'
 import {
   ConnectionMock,
@@ -219,25 +219,21 @@ describe('Tests for Postgres Database Processing', () => {
   })
 
   describe('#getPrimaryKeys', () => {
-    let airQualityConnStr: string
-
-    beforeAll(async () => {
-      airQualityConnStr =
-        getConfig().TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING!
-    })
-
     it('should get primary keys', async () => {
-      const dbProcessor = new PostgresDatabaseBuilder(airQualityConnStr, true)
+      const dbProcessor = new PostgresDatabaseBuilder(
+        postgresConnectionMock.connection_string,
+        pgConnMock.with_ssl
+      )
 
       // @ts-expect-error - createKyselyResources is protected
-      dbProcessor.createKyselyResources('opendental')
+      dbProcessor.createKyselyResources('sort_xyz')
 
       // @ts-expect-error - getPrimaryKeys is protected
       const primaryKeys = await dbProcessor.getPrimaryKeys('public')
 
       expect(primaryKeys).toBeDefined()
       expect(primaryKeys).toBeInstanceOf(Array)
-      expect(primaryKeys.length).toBe(407)
+      expect(primaryKeys.length).toBe(51)
     })
 
     describe('when unable to get primary keys', () => {

@@ -114,20 +114,6 @@ export const snowflakeConnectionMockPartial = {
   visibility: 'private'
 } satisfies Partial<ConnectionSelect>
 
-export const voiceForAmericaMockPartial = {
-  id: '2b0511b3-e178-448f-b7d4-01b7fe591844',
-  organization_id: '06becf48-9eb5-4037-96c1-b8deb8f15eae',
-  name: 'Voice 4 America',
-  data_provider: 'snowflake',
-  created_by: userMock.id,
-  created_at: new Date(),
-  warehouse: 'DEV_WH',
-  with_ssl: false,
-  readonly_connection_id: null,
-  visibility: 'private'
-} satisfies Partial<ConnectionSelect>
-
-// Derived from: https://www.notion.so/sortxyz/Sample-Databases-d49f5d2b8ff84d45a0fdbdc230293690
 export const airQualityPostgresConnectionMockPartial = {
   id: 'dc5a9e87-9398-4523-bd53-38e962aa8c17',
   organization_id: 'c748d7d6-a612-4723-aa55-8fb481fb6b08',

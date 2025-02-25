@@ -9,7 +9,6 @@ import type { ConnectionSelectWithEncryption } from '../types/kysely/connection/
 describe('connection.utils', () => {
   const connMock = new ConnectionMock()
   let snowflakeConnectionMock: ConnectionSelectWithEncryption
-  let voice4AmericaMock: ConnectionSelectWithEncryption
   let testUnlockConnectionMock: ConnectionSelectWithEncryption
 
   let tests: {
@@ -25,31 +24,18 @@ describe('connection.utils', () => {
       connectionMocks.snowflakeConnectionMockPartial
     )
 
-    voice4AmericaMock = connMock.createSnowflakeHybridConnection({
-      ...connectionMocks.voiceForAmericaMockPartial,
-      connection_string: getConfig().TEST_SNOWFLAKE_V4A_CONNECTION_STRING!
-    })
-
     testUnlockConnectionMock = connMock.createSnowflakeHybridConnection({
       ...connectionMocks.snowflakeConnectionMockPartial,
       connection_string: getConfig().TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING!
     })
 
     connMock.add(snowflakeConnectionMock)
-    connMock.add(voice4AmericaMock)
 
     tests = [
       // Sort internal testing
       {
         dataProvider: 'snowflake' as const,
         connection: snowflakeConnectionMock,
-        parse: (connectionString: string): unknown =>
-          ConnectionUtils.parseSnowflakeConnectionString(connectionString)
-      },
-      // Non-VPS Account Locator Formats
-      {
-        dataProvider: 'snowflake' as const,
-        connection: voice4AmericaMock,
         parse: (connectionString: string): unknown =>
           ConnectionUtils.parseSnowflakeConnectionString(connectionString)
       },
@@ -78,18 +64,8 @@ describe('connection.utils', () => {
       expect(parsed).toHaveProperty('password')
     })
 
-    it('should parse voice 4 america connection string', async () => {
-      const { dataProvider: _, connection, parse } = tests[1]
-      const decryptedString = await connection.connection_string.decrypt()
-      const parsed = parse(decryptedString)
-      expect(parsed).toHaveProperty('database')
-      expect(parsed).toHaveProperty('account')
-      expect(parsed).toHaveProperty('user')
-      expect(parsed).toHaveProperty('password')
-    })
-
     it('should parse unlock connection string', async () => {
-      const { dataProvider: _, connection, parse } = tests[2]
+      const { dataProvider: _, connection, parse } = tests[1]
       const decryptedString = await connection.connection_string.decrypt()
       const parsed = parse(decryptedString)
       expect(parsed).toHaveProperty('database')
