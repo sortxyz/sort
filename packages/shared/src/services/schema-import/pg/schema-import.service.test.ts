@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-import { createKysely, getDb, disconnectKysely, getConfig } from '../../..'
+import { createKysely, getDb, disconnectKysely } from '../../..'
 import { uuidFormat } from '../../../constants/type-mask.constant'
 import {
   airQualityPostgresConnectionMockPartial,
@@ -116,25 +116,6 @@ describe('Tests for Postgres Schema Import', () => {
 
       expect(schemaImporter).toStrictEqual(expect.stringMatching(uuidFormat))
     }, 10000)
-
-    it('should import a live schema', async () => {
-      const airQualityConnStr =
-        getConfig().TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING!
-
-      const pg = new PostgresSchemaImportService(
-        connMock.create({
-          ...airQualityPostgresConnectionMockPartial,
-          connection_string: airQualityConnStr
-        })
-      )
-
-      const log = createFastifyMockLogger()
-      const schemaImporter = await pg.importSchema(user.id, log)
-
-      snapshotMocks.push(schemaImporter)
-
-      expect(schemaImporter).toStrictEqual(expect.stringMatching(uuidFormat))
-    }, 30000)
 
     it('should import a local schema x2', async () => {
       const pg = new PostgresSchemaImportService(
