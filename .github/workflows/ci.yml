@@ -73,7 +73,7 @@ jobs:
         run: |
           docker build --target api . -t api
       - name: Run Trivy vulnerability scanner on Docker API image
-        uses: aquasecurity/trivy-action@d2a392a13760cb64cb6bbd31d4bed2a7d9a5298d
+        uses: aquasecurity/trivy-action@a11da62073708815958ea6d84f5650c78a3ef85b
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
@@ -89,7 +89,7 @@ jobs:
         run: |
           docker build --target worker . -t worker
       - name: Run Trivy vulnerability scanner on Docker Worker image
-        uses: aquasecurity/trivy-action@d2a392a13760cb64cb6bbd31d4bed2a7d9a5298d
+        uses: aquasecurity/trivy-action@a11da62073708815958ea6d84f5650c78a3ef85b
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
