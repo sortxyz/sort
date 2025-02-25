@@ -331,7 +331,7 @@ export const search = async ({
   limit: number
   context: SortContext
 }) => {
-  // TODO metadata search https://github.com/sortxyz/sort-api-v2/issues/683
+  // TODO Add metadata search to search results
 
   const { phrase, scopes } = parseQuery(query)
 

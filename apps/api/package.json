@@ -1,6 +1,6 @@
 {
   "bugs": {
-    "url": "https://github.com/sortxyz/sort-api-v2/issues"
+    "url": "https://github.com/sortxyz/sort/issues"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
@@ -59,13 +59,13 @@
     "ts-jest": "~29.1.0",
     "typescript": "~5.5.0"
   },
-  "homepage": "https://github.com/sortxyz/sort-api-v2#readme",
+  "homepage": "https://github.com/sortxyz/sort#readme",
   "license": "ISC",
   "name": "sort-api-v2",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sortxyz/sort-api-v2.git"
+    "url": "git+https://github.com/sortxyz/sort.git"
   },
   "scripts": {
     "prepare": "tsc && mkdir -p dist/docs/descriptions && cp src/docs/descriptions/*.md dist/docs/descriptions",

@@ -71,7 +71,7 @@ export const isEqual = (
     })
   }
 
-  // FIXME col.type === binary https://github.com/sortxyz/sort-api-v2/issues/1635
+  // FIXME col.type === binary (isEqual should also support binary columns)
 
   switch (col.type) {
     case 'string':

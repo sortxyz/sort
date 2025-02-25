@@ -14,8 +14,8 @@ export const snowflakeErrorConditionCodes = {
   DATETIME_PARSE_INVALID: '100040',
   STRING_NUMERIC_COMPARISON_ERROR: '100038',
   SQL_COMPILATION_ERROR: '000904',
-  SHARED_VIEW_EXPANSION_ERROR: '090804', // https://github.com/sortxyz/sort-api-v2/issues/1425
-  DOMAIN_DOES_NOT_EXIST_OR_NOT_AUTHORIZED: '002003', // https://github.com/sortxyz/sort-api-v2/issues/1426
+  SHARED_VIEW_EXPANSION_ERROR: '090804',
+  DOMAIN_DOES_NOT_EXIST_OR_NOT_AUTHORIZED: '002003',
   DOMAIN_DOES_NOT_EXIST_ERROR: '002003' // https://github.com/snowflakedb/snowflake-ml-python/blob/2932445f3e0fbf42000d51ec9c9256032570ed76/snowflake/ml/_internal/exceptions/fileset_errors.py#L3
 } satisfies Record<string, string>
 

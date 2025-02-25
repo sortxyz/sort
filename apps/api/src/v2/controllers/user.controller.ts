@@ -231,7 +231,7 @@ export const removeUserProfile = async (
   request: FastifyRequestTypebox<typeof RemoveUserProfileSchema>,
   reply: FastifyReplyTypebox<typeof RemoveUserProfileSchema>
 ) => {
-  // TODO https://github.com/sortxyz/sort-api-v2/issues/665
+  // TODO: Removing a user profile was never implemented properly and needs to be
   return reply.status(501).send({
     type: 'error',
     payload: {
