@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SLOW='(src/v2/routes/orgs/databases/issues.search.route.test.ts src/v2/services/kysely/ src/v2/routes/connections/)'
+
+pnpm lint:fix && \
+echo "Running parallel tests.." && \
+NODE_ENV=test pnpm exec jest --config ./jest.config.ts --testPathIgnorePatterns=$SLOW && \
+echo "Running sequential tests.." && \
+NODE_ENV=test pnpm exec jest --config ./jest.config.ts --detectOpenHandles --testPathPattern=$SLOW

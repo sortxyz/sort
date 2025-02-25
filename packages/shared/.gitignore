@@ -1,0 +1,32 @@
+node_modules
+
+.eslintcache
+.env
+.env.development
+.env.production
+.env.staging
+.env.test
+
+google-api-credentials.json
+
+# JetBrains IDEs
+.idea
+
+# Visual Studio Code
+.vscode
+
+# OS X
+.DS_Store
+
+# TypeScript
+dist
+tsconfig.tsbuildinfo
+
+# Jest
+coverage
+
+# vim
+*.swp
+
+# openapi testing
+openapi

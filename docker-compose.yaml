@@ -1,0 +1,190 @@
+name: sort
+networks:
+  default:
+    name: sort-network
+services:
+  postgres:
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-sort_xyz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dbadmin}
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+    image: sort-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./packages/sort-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "sh", "-c", "/scripts/health-probe.sh"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+      start_interval: 5s
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+  sort-api:
+    container_name: sort-api
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-sort_xyz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dbadmin}
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+      - POSTGRES_HOST=local-postgres-db:5432
+      - NODE_ENV=production
+    image: sort-api
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 512M
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: true
+        restart: true
+    env_file:
+      - path: ./scripts/sort-api/env.onprem
+        required: true
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+      start_interval: 5s
+    ports:
+      - 8080:8080
+    links:
+      - postgres:local-postgres-db
+    post_start:
+      - command: pnpm db:create-test-user
+        working_dir: /prod/api
+        user: root
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+  sort-worker:
+    container_name: sort-worker
+    environment:
+      - HEALTH_SERVICE_PORT=8081
+      - POSTGRES_DB=${POSTGRES_DB:-sort_xyz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dbadmin}
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+      - POSTGRES_HOST=local-postgres-db:5432
+      - NODE_ENV=production
+    env_file:
+      - path: ./scripts/sort-worker/env.onprem
+        required: true
+    image: sort-worker
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+      resources:
+        limits:
+          memory: 800M
+        reservations:
+          memory: 400M
+    depends_on:
+      sort-api:
+        condition: service_healthy
+        required: true
+        restart: true
+    ports:
+      - 8081:8081
+    links:
+      - postgres:local-postgres-db
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://0.0.0.0:8081/ || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+      start_interval: 5s
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+  sort-hub:
+    container_name: sorthub
+    image: sort-hub
+    ports:
+      - "3000:3000"
+    env_file:
+      - path: ./scripts/sorthub/env.onprem
+        required: true
+    environment:
+      SORT_WEB_API_BASE_URL: ${SORT_WEB_API_BASE_URL:-http://sort-api:8080}
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3000
+      ON_PREM_AUTH: ${ON_PREM_AUTH:-1}
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      sort-worker:
+        condition: service_healthy
+        required: true
+        restart: true
+      sort-api:
+        condition: service_healthy
+        required: true
+        restart: true
+  sorthub-nginx-proxy:
+    container_name: sorthub-nginx-proxy
+    image: nginx:1.27.3
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./scripts/nginx-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./scripts/nginx-proxy/certs:/etc/nginx/certs:ro
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      sort-hub:
+        condition: service_healthy
+        required: true
+        restart: true

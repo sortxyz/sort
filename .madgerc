@@ -1,0 +1,10 @@
+{
+  "detectiveOptions": {
+    "es6": {
+      "mixedImports": true,
+      "skipTypeImports": false
+    }
+  },
+  "fileExtensions": ["ts"],
+  "fontSize": 8
+}

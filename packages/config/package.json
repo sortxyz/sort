@@ -1,0 +1,36 @@
+{
+  "name": "@sort/config",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "prepare": "tsc",
+    "lint:fix": "eslint . --ext .js,.ts --fix --cache",
+    "lint": "eslint . --ext .js,.ts --cache",
+    "cov": "pnpm format && NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles --coverage",
+    "cov:open": "open src/coverage/lcov-report/index.html",
+    "jest": "NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles",
+    "madge": "pnpm exec madge --circular src/config.ts",
+    "madge:img": "pnpm exec madge --circular --image shared-circular.svg src/config.ts",
+    "test": "pnpm madge && pnpm lint:fix && NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles"
+  },
+  "main": "dist/config.js",
+  "dependencies": {
+    "@sinclair/typebox": "^0.33.11",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.2.5",
+    "madge": "^8.0.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "~29.1.0",
+    "typescript": "~5.5.0"
+  }
+}

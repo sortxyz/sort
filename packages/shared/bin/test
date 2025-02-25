@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+SLOW='(src/services/issue.search.service.test.ts src/services/change-requests/change-request.search.service.test.ts src/services/change-requests/change-request.service.test.ts src/services/user.service.test.ts src/services/query/execution/intent/previous/postgres.service.test.ts src/services/kysely/ src/services/schema-import/ src/mocks/change-requests/change.mock.test.ts)'
+
+pnpm lint:fix && \
+echo "Running parallel tests.." && \
+NODE_ENV=test pnpm exec jest --config ./jest.config.ts --testPathIgnorePatterns=$SLOW && \
+echo "Running sequential tests.." && \
+NODE_ENV=test pnpm exec jest --config ./jest.config.ts --detectOpenHandles --testPathPattern=$SLOW

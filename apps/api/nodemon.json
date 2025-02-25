@@ -1,0 +1,6 @@
+{
+  "exec": "tsx ./src/index.ts",
+  "ext": "ts,md",
+  "ignore": ["./src/**/*.test.ts"],
+  "watch": ["./src"]
+}

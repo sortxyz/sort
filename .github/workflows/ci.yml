@@ -1,0 +1,112 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-workspace:
+    name: Build, lint and test workspace
+    runs-on: ubuntu-latest-8-core
+    env:
+      TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING }}
+      TEST_SNOWFLAKE_HYBRID_USER: ${{ secrets.TEST_SNOWFLAKE_HYBRID_USER }}
+      TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING }}
+      TEST_SNOWFLAKE_V4A_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_V4A_CONNECTION_STRING }}
+      TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING: ${{ secrets.TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SORT_DB_PAT }}
+      - uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: 'pnpm'
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+      - name: lint project
+        run: |
+          pnpm run -r lint
+      - name: start infra
+        run: |
+          pnpm run --filter '@sort/shared' infra:up
+      - name: run packages/shared tests
+        run: |
+          pnpm run --filter '@sort/shared' test:all
+      - name: run packages/config tests
+        run: |
+          pnpm run --filter '@sort/config' test
+      - name: run packages/logger tests
+        run: |
+          pnpm run --filter '@sort/logger' test
+      - name: run apps/worker tests
+        run: |
+          pnpm run --filter '@sort/change-request-worker' test
+      - name: run apps/api tests
+        run: |
+          pnpm run --filter 'sort-api-v2' test:all
+      - name: stop infra
+        run: |
+          pnpm run --filter '@sort/shared' infra:down
+  build-docker-images:
+    if: github.event_name == 'pull_request'
+    name: Build the Docker images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Trivy
+        uses: aquasecurity/setup-trivy@v0.2.2 # B/c this download fails often, run first to avoid wasting time building
+        with:
+          cache: true
+          version: v0.56.1
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SORT_DB_PAT }}
+      - name: docker build api
+        run: |
+          docker build --target api . -t api
+      - name: Run Trivy vulnerability scanner on Docker API image
+        uses: aquasecurity/trivy-action@d2a392a13760cb64cb6bbd31d4bed2a7d9a5298d
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
+        with:
+          image-ref: api
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL'
+          skip-setup-trivy: true
+      - name: docker build change request worker
+        run: |
+          docker build --target worker . -t worker
+      - name: Run Trivy vulnerability scanner on Docker Worker image
+        uses: aquasecurity/trivy-action@d2a392a13760cb64cb6bbd31d4bed2a7d9a5298d
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db
+        with:
+          image-ref: worker
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL'
+          skip-setup-trivy: true
+  automerge:
+    name: Merge dependabot's PRs
+    needs: test-workspace
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3

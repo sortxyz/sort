@@ -1,0 +1,1 @@
+Gets all Database Issues.

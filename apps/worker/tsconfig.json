@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noUnusedLocals": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "rootDir": "src",
+    "strict": true,
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "target": "ES2022",
+    "sourceMap": true,
+    "inlineSources": true,
+    "noErrorTruncation": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/@types"
+    ]
+  },
+  "exclude": [
+    "coverage",
+    "dist",
+    "node_modules",
+    "jest.config.ts"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noUnusedLocals": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": [
+      "ESNext"
+    ],
+    "target": "ES2022",
+    "sourceMap": true,
+    "inlineSources": true,
+    "noErrorTruncation": true
+  },
+  "exclude": [
+    "coverage",
+    "dist",
+    "node_modules",
+    "jest.config.ts",
+    "pino-pretty.config"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

@@ -1,0 +1,1 @@
+ALTER TABLE public."snapshot_table" ADD COLUMN "is_view" boolean NOT NULL DEFAULT false;

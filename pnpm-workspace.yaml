@@ -1,0 +1,7 @@
+packages:
+  - "packages/config"
+  - "packages/logger"
+  - "packages/shared"
+  - "packages/shutdown"
+  - "apps/worker"
+  - "apps/api"

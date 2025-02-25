@@ -1,0 +1,13 @@
+services:
+  postgres:
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-sort_xyz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dbadmin}
+      - POSTGRES_USER=${POSTGRES_USER:-root}
+    image: postgres:14
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ../../packages/sort-db:/docker-entrypoint-initdb.d

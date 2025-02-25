@@ -1,0 +1,52 @@
+{
+  "name": "@sort/change-request-worker",
+  "description": "Execution Worker for Sort",
+  "version": "1.0.267",
+  "main": "dist/index.js",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon | pino-pretty",
+    "start": "node ./dist/index.js",
+    "prepare": "tsc",
+    "lint": "eslint . --ext .js,.ts --cache",
+    "lint:fix": "eslint . --ext .js,.ts --fix --cache",
+    "madge": "pnpm exec madge --circular src/index.ts ../../packages/",
+    "madge:img": "pnpm exec madge --circular --image worker-circular.svg src/index.ts ../../packages/",
+    "jest": "NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles",
+    "test": "pnpm madge && pnpm lint:fix && NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles"
+  },
+  "dependencies": {
+    "@sentry/node": "^8.54.0",
+    "@sinclair/typebox": "^0.33.11",
+    "@sort/config": "workspace:*",
+    "@sort/logger": "workspace:*",
+    "@sort/shared": "workspace:*",
+    "@sort/shutdown": "workspace:*",
+    "cron": "^3.5.0",
+    "fastify": "^4.28.1",
+    "generic-pool": "^3.9.0",
+    "kysely": "^0.27.5",
+    "pg": "^8.13.1",
+    "pg-types": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.1",
+    "@types/pg": "^8.11.11",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.2.5",
+    "nodemon": "^3.1.9",
+    "madge": "^8.0.0",
+    "pino-pretty": "^13.0.0",
+    "prettier": "^3.0.0",
+    "ts-jest": "~29.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.5.0"
+  }
+}

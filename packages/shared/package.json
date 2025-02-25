@@ -1,0 +1,88 @@
+{
+  "name": "@sort/shared",
+  "private": true,
+  "scripts": {
+    "prepare": "tsc",
+    "db:codegen": "pnpm exec tsx ./scripts/db/codegen.ts",
+    "db:gen-postgres-errors": "pnpm exec tsx ./scripts/db/gen-postgres-errors.ts",
+    "infra:down": "docker compose down",
+    "infra:up": "docker compose up -d",
+    "lint": "eslint . --ext .js,.ts --cache",
+    "lint:fix": "eslint . --ext .js,.ts --fix --cache",
+    "madge": "pnpm exec madge --circular src/index.ts",
+    "madge:img": "pnpm exec madge --circular --image shared-circular.svg src/index.ts",
+    "test:all": "pnpm madge && bin/test",
+    "test:cov": "pnpm lint:fix && NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles --coverage",
+    "jest": "NODE_ENV=test jest --config ./jest.config.ts --detectOpenHandles",
+    "test": "pnpm lint:fix && pnpm jest"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.33.11",
+    "@sort/config": "workspace:*",
+    "@sort/logger": "workspace:*",
+    "@tediousjs/connection-string": "^0.5.0",
+    "fast-jwt": "^5.0.5",
+    "fastify": "^4.28.1",
+    "form-data": "^4.0.1",
+    "generic-pool": "^3.9.0",
+    "get-jwks": "^11.0.0",
+    "kysely": "^0.27.5",
+    "mailgun.js": "^11.1.0",
+    "markdown-it": "^14.1.0",
+    "pg": "^8.13.1",
+    "pg-connection-string": "^2.7.0",
+    "pg-types": "^4.0.1",
+    "pgsql-ast-parser": "^12.0.1",
+    "snowflake-sdk": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.13.1",
+    "@types/pg": "^8.11.11",
+    "@types/snowflake-sdk": "^1.6.24",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.2.5",
+    "kysely-codegen": "0.17.0",
+    "madge": "^8.0.0",
+    "node-html-parser": "^6.1.12",
+    "prettier": "^3.0.0",
+    "ts-jest": "~29.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.5.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.js",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.js",
+        "default": "./dist/index.js"
+      }
+    },
+    "./*": {
+      "require": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      },
+      "import": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
+      }
+    },
+    "./package.json": "./package.json"
+  }
+}

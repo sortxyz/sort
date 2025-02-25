@@ -1,0 +1,101 @@
+# Default values for change-request-worker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 409563124858.dkr.ecr.us-west-2.amazonaws.com/workers
+  pullPolicy: Always
+  tag: f2101aa5fc97f8175d8a738105b4778b283e528a
+
+imagePullSecrets: []
+nameOverride: "change-request-worker"
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  roleArn: "arn:aws:iam::409563124858:role/us-west-2-sort-services-role"
+  name: "change-request-worker"
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+env:
+  - name: LOG_LEVEL
+    value: info
+  - name: POSTGRES_HOST
+    value: postgres.development.internal.sort.xyz:5432
+  - name: POSTGRES_DB
+    value: sort_xyz
+  - name: POSTGRES_USER
+    value: postgres
+
+secretNameRef: "change-request-worker-secrets"
+
+resources:
+  # if you move this up, change in the Dockerfile as well
+  requests:
+    cpu: 400m
+    memory: 400Mi
+  limits:
+    cpu: 500m
+    memory: 800Mi
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 3
+  periodSeconds: 10
+  failureThreshold: 2
+  timeoutSeconds: 5
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 3
+  periodSeconds: 20
+  failureThreshold: 3
+  timeoutSeconds: 5
+
+startupProbe:
+  httpGet:
+    path: /
+    port: 8080
+  failureThreshold: 10
+  periodSeconds: 10
+  timeoutSeconds: 10
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 81
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

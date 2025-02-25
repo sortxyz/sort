@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sort-api-v2
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: sort-api-v2
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sortxyz/sort-api-v2.git
+    targetRevision: ${REVISION}
+    path: helm/api
+    helm:
+      valueFiles:
+        - ../../kubernetes/api/${ENVIRONMENT}/values.yml
+  destination:
+    name: in-cluster
+    namespace: api
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,1 @@
+Gets a Label.

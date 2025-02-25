@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: change-request-worker
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: change-request-worker
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/sortxyz/sort-api-v2.git
+    targetRevision: ${REVISION}
+    path: helm/worker
+    helm:
+      valueFiles:
+        - ../../kubernetes/worker/${ENVIRONMENT}/values.yml
+  destination:
+    name: in-cluster
+    namespace: workers
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+      - CreateNamespace=true

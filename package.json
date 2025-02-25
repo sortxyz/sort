@@ -1,0 +1,35 @@
+{
+  "name": "@sort/monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:api": "pnpm run --filter sort-api-v2 dev",
+    "dev:worker": "pnpm run --filter @sort/change-request-worker dev",
+    "prepare": "husky",
+    "db:reset": "pnpm run --filter sort-api-v2 db:reset",
+    "db:codegen": "pnpm run --filter @sort/shared db:codegen",
+    "lint:fix": "pnpm run -r lint:fix",
+    "madge": "pnpm run -r madge",
+    "test": "pnpm run --filter !sort-api-v2 --filter !@sort/shared -r test && pnpm run --filter sort-api-v2 --filter @sort/shared test:all",
+    "test-worker": "pnpm run --filter @sort/change-request-worker test",
+    "test-api": "pnpm run --filter sort-api-v2 test:all",
+    "infra:up": "pnpm run --filter sort-api-v2 infra:up",
+    "infra:down": "pnpm run --filter sort-api-v2 infra:down",
+    "reset": "rm -rf ./node_modules && pnpm -r exec rm -rf node_modules dist .eslintcache tsconfig.tsbuildinfo"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "packageManager": "pnpm@9.0.4",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "syncpack": "^13.0.2"
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE public."label" ALTER COLUMN "name" TYPE VARCHAR(16);
