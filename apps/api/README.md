@@ -1,4 +1,4 @@
-# sort-api-v2
+# sort
 
 Sort public API
 

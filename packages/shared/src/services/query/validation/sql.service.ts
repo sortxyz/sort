@@ -61,8 +61,8 @@ export class SqlValidationQueryService extends BaseValidationQueryService {
   // you can find the AST SELECT tests here: https://github.com/taozhi8833998/node-sql-parser/blob/master/test/select.spec.js
   validate(): QueryValidation {
     try {
-      // TODO(https://github.com/sortxyz/sort-api-v2/issues/935): validate that all DBs in the query == our DB
-      // TODO(https://github.com/sortxyz/sort-api-v2/issues/936): validate that all schemas in the query == our schemas
+      // TODO: validate that all DBs in the query == our DB
+      // TODO: validate that all schemas in the query == our schemas
 
       const parsedAst = parse(this.sql)
 

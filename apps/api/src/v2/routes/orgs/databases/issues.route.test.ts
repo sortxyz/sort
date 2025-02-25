@@ -988,8 +988,7 @@ describe('/v2 issues routes', () => {
       defaultPayload: issueMock.createPayload()
     })
 
-    // TODO: Implement this functionality in the controller https://github.com/sortxyz/sort-api-v2/issues/1708
-    xit('should respond with 422 when one or more labels cannot be found', async () => {
+    it('should respond with 422 when one or more labels cannot be found', async () => {
       const label3 = labelMock.create({
         name: 'Label 3',
         connection_id: pubConn.id,
