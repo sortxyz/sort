@@ -112,6 +112,7 @@
   "engines": {
     "node": "22.x"
   },
+  "name": "@sort/web",
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production react-router build",
