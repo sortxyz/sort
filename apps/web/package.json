@@ -111,18 +111,15 @@
   "engines": {
     "node": "22.x"
   },
-  "packageManager": "pnpm@9.15.5+sha512.845196026aab1cc3f098a0474b64dfbab2afe7a1b4e91dd86895d8e4aa32a7a6d03049e2d0ad770bbe4de023a7122fb68c1a1d6e0d033c7076085f9d5d4800d4",
   "private": true,
   "scripts": {
-    "build": "pnpm run -w --stream '/^build:.*$/'",
+    "build": "NODE_ENV=production react-router build",
     "build-storybook": "storybook build",
-    "build:app": "NODE_ENV=production react-router build",
-    "build:packages": "pnpm run -rp build",
-    "check": "pnpm run -w --stream '/.*:check$/'",
+    "check": "pnpm run --stream '/.*:check$/'",
     "clean": "scripts/clean.sh",
     "codegen:playwright": "playwright codegen http://localhost:3000 --load-storage=playwright/.auth/test-user-chromium.json",
     "coverage:test:storybook": "test-storybook --coverage",
-    "dev": "pnpm run -w --stream '/^dev:.*$/'",
+    "dev": "pnpm run --stream '/^dev:.*$/'",
     "dev:app": "react-router dev",
     "dev:packages": "pnpm run -rp dev",
     "format": "prettier --write --cache --cache-location .prettiercache .",
@@ -140,7 +137,7 @@
     "test": "pnpm run -w --stream '/test:(unit|e2e)$/'",
     "test:e2e": "playwright test",
     "test:e2e:ui": "pnpm test:e2e --ui",
-    "test:storybook": "pnpm run -w --stream '/storybook:(dev|test)$/'",
+    "test:storybook": "pnpm run --stream '/storybook:(dev|test)$/'",
     "test:unit": "vitest",
     "type:check": "react-router typegen && tsc --noEmit"
   },

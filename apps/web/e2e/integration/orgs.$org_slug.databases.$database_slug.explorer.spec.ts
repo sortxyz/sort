@@ -487,51 +487,48 @@ test("editing a row includes the existing values", async ({
   await expect(page.getByRole("heading", { name: "test" })).toBeVisible();
 });
 
-test(
-  "can add a row when not all fields are selected",
-  {
-    annotation: {
-      type: "issue",
-      description: "https://github.com/sortxyz/sortweb/issues/895",
-    },
-  },
-  async ({ page, organization, database, table, schema }) => {
-    // TODO: fix this test on monday.
-    test.slow();
-    await page.goto(
-      `/orgs/${organization.slug}/databases/${database.slug}/explorer/schemas/${schema.name}/tables/${table.name}`,
-    );
-    await page.getByRole("button", { name: "Filters" }).click();
-    const dialog = page.getByRole("dialog");
-    await dialog.waitFor();
-    await dialog.getByRole("tab", { name: "Columns" }).click();
+test("can add a row when not all fields are selected", async ({
+  page,
+  organization,
+  database,
+  table,
+  schema,
+}) => {
+  // TODO: fix this test on monday.
+  test.slow();
+  await page.goto(
+    `/orgs/${organization.slug}/databases/${database.slug}/explorer/schemas/${schema.name}/tables/${table.name}`,
+  );
+  await page.getByRole("button", { name: "Filters" }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.waitFor();
+  await dialog.getByRole("tab", { name: "Columns" }).click();
 
-    await dialog.getByLabel("test_jsonb").uncheck();
-    await dialog.getByLabel("test_text").uncheck();
-    await dialog.getByLabel("test_timestamp").uncheck();
-    await dialog.getByRole("button", { name: "Update" }).click();
-    await dialog.waitFor({ state: "hidden" });
+  await dialog.getByLabel("test_jsonb").uncheck();
+  await dialog.getByLabel("test_text").uncheck();
+  await dialog.getByLabel("test_timestamp").uncheck();
+  await dialog.getByRole("button", { name: "Update" }).click();
+  await dialog.waitFor({ state: "hidden" });
 
-    await page.getByRole("button", { name: "Add Selected Rows" }).click();
+  await page.getByRole("button", { name: "Add Selected Rows" }).click();
 
-    await page
-      .getByRole("row")
-      .last()
-      .getByRole("cell", { name: "id" })
-      .getByRole("textbox")
-      .fill(randomUUID());
+  await page
+    .getByRole("row")
+    .last()
+    .getByRole("cell", { name: "id" })
+    .getByRole("textbox")
+    .fill(randomUUID());
 
-    await page.getByRole("button", { name: "Propose 1 Change" }).click();
-    await page.getByRole("dialog").waitFor();
-    await page.getByRole("dialog").getByLabel("Title").fill("test");
-    await page.getByRole("button", { name: "Create Change Request" }).click();
-    await page.waitForURL(
-      new RegExp(
-        `\\/orgs\\/${organization.slug}\\/databases\\/${database.slug}\\/change-requests\\/\\d+`,
-      ),
-    );
+  await page.getByRole("button", { name: "Propose 1 Change" }).click();
+  await page.getByRole("dialog").waitFor();
+  await page.getByRole("dialog").getByLabel("Title").fill("test");
+  await page.getByRole("button", { name: "Create Change Request" }).click();
+  await page.waitForURL(
+    new RegExp(
+      `\\/orgs\\/${organization.slug}\\/databases\\/${database.slug}\\/change-requests\\/\\d+`,
+    ),
+  );
 
-    await page.reload();
-    await expect(page.getByRole("heading", { name: "test" })).toBeVisible();
-  },
-);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "test" })).toBeVisible();
+});
