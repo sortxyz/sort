@@ -1,0 +1,20 @@
+name: Web Unit Tests
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: "apps/web/package.json"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: build @sort/web
+        run: pnpm --filter '@sort/web' build
+      - name: run @sort/web checks
+        run: pnpm --filter '@sort/web' run check
+      - name: run @sort/web unit tests
+        run: pnpm --filter '@sort/web' test:unit
