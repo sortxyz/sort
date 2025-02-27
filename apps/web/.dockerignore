@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Testing
+coverage
+playwright-report
+test-results
+storybook-static
+.nyc_output
+
+# Development
+.git
+.github
+.husky
+.vscode
+*.log
+.eslintcache
+.prettiercache
+.env
+.env.*
+
+# Build outputs
+build
+dist
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Misc
+.DS_Store
+*.pem
+.vercel

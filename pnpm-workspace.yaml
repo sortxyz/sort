@@ -3,5 +3,7 @@ packages:
   - "packages/logger"
   - "packages/shared"
   - "packages/shutdown"
+  - "packages/sdk"
   - "apps/worker"
   - "apps/api"
+  - "apps/web"

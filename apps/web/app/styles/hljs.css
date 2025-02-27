@@ -1,0 +1,95 @@
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+}
+
+.hljs {
+  color: theme("colors.gray.900");
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  color: theme("colors.red.600");
+}
+
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  color: theme("colors.violet.600");
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-variable {
+  color: theme("colors.blue.600");
+}
+
+.hljs-meta .hljs-string,
+.hljs-regexp,
+.hljs-string {
+  color: theme("colors.blue.700");
+}
+
+.hljs-built_in,
+.hljs-symbol {
+  color: theme("colors.orange.600");
+}
+
+.hljs-code,
+.hljs-comment,
+.hljs-formula {
+  color: theme("colors.gray.700");
+}
+
+.hljs-name,
+.hljs-quote,
+.hljs-selector-pseudo,
+.hljs-selector-tag {
+  color: theme("colors.green.600");
+}
+
+.hljs-subst {
+  color: theme("colors.gray.800");
+}
+
+.hljs-section {
+  color: theme("colors.blue.700");
+  font-weight: 700;
+}
+
+.hljs-bullet {
+  color: theme("colors.orange.700");
+}
+
+.hljs-emphasis {
+  color: theme("colors.gray.900");
+  font-style: italic;
+}
+
+.hljs-strong {
+  color: theme("colors.gray.900");
+  font-weight: 700;
+}
+
+.hljs-addition {
+  color: theme("colors.green.700");
+  background-color: theme("colors.green.100");
+}
+
+.hljs-deletion {
+  color: theme("colors.red.700");
+  background-color: theme("colors.red.100");
+}
