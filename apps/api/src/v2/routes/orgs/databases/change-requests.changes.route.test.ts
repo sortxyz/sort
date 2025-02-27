@@ -71,7 +71,7 @@ describe('/v2 change-request changes routes', () => {
   const orgAdminUser = userMock.create()
   const orgMemberUser1 = userMock.create()
   const orgMemberUser2 = userMock.create()
-  const sorthubSvcAccount = userMock.create({
+  const sortwebSvcAccount = userMock.create({
     email: config.SORTUI_SERVICE_ACCOUNT_EMAIL
   })
   const org = orgMock.create({ created_by: orgAdminUser.id })
@@ -120,7 +120,7 @@ describe('/v2 change-request changes routes', () => {
     await UserService.createUser(nonOrgUser2)
     await UserService.createUser(orgMemberUser1)
     await UserService.createUser(orgMemberUser2)
-    await UserService.createUser(sorthubSvcAccount)
+    await UserService.createUser(sortwebSvcAccount)
     await OrganizationService.create(org)
     await OrganizationService.addMember(org.slug, orgMemberUser1.id, 'member')
     await OrganizationService.addMember(org.slug, orgMemberUser2.id, 'member')
@@ -1012,7 +1012,7 @@ describe('/v2 change-request changes routes', () => {
         it('should respond with 200 and return all changes', async () => {
           await testGetChanges(
             orgMemberUser1,
-            sorthubSvcAccount,
+            sortwebSvcAccount,
             pubConn,
             pubDbEntry,
             200

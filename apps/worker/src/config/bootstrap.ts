@@ -39,7 +39,7 @@ export const configSchema = Type.Object({
   SCHEMA_IMPORT_JOB_EXPIRATION_MINUTES: Type.Number({ default: 15 }),
   CUSTOMER_QUERY_TIMEOUT_MS: Type.Number({ default: 30000 }),
   IS_LOCAL_DB_CONNECTION_OK: Type.Boolean({ default: false }),
-  SORTHUB_HOST: Type.String()
+  SORT_WEB_HOST: Type.String()
 })
 
 // Make Config.getConfig() type aware.
@@ -48,8 +48,8 @@ declare module '@sort/config' {
 }
 
 const postEnvLoad = (env: Record<string, unknown>) => {
-  if (!env.SORTHUB_HOST) {
-    env.SORTHUB_HOST = env.IS_PROD_ENV
+  if (!env.SORT_WEB_HOST) {
+    env.SORT_WEB_HOST = env.IS_PROD_ENV
       ? 'https://sort.xyz'
       : 'http://localhost:3000'
   }

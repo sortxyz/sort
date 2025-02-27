@@ -9,7 +9,7 @@ import * as KyselyService from '../../../global/services/kysely.service'
 import { getTestServer } from '../../../global/utils/test.util'
 import { auth0JwtMock, auth0JwtDecodedMock } from '../../mocks/jwt.mock'
 import {
-  SortHubJwt,
+  SortWebJwt,
   EmailVerificationJwt,
   jwtRegExp,
   auth0JwtTestSign
@@ -67,7 +67,7 @@ describe('v2/routes/special/users.route', () => {
           }
         })
 
-        const jwt = await SortHubJwt.verify(body.payload.jwt)
+        const jwt = await SortWebJwt.verify(body.payload.jwt)
         expect(jwt).toEqual({
           aud: 'sort.xyz',
           iss: 'sort.xyz',
@@ -134,7 +134,7 @@ describe('v2/routes/special/users.route', () => {
           }
         })
 
-        const jwt = await SortHubJwt.verify(body.payload.jwt)
+        const jwt = await SortWebJwt.verify(body.payload.jwt)
         expect(jwt).toEqual({
           aud: 'sort.xyz',
           iss: 'sort.xyz',
@@ -199,7 +199,7 @@ describe('v2/routes/special/users.route', () => {
           }
         })
 
-        const jwt = await SortHubJwt.verify(body.payload.jwt)
+        const jwt = await SortWebJwt.verify(body.payload.jwt)
         expect(jwt).toEqual({
           aud: 'sort.xyz',
           iss: 'sort.xyz',
@@ -361,7 +361,7 @@ describe('v2/routes/special/users.route', () => {
       })
 
       it('revokes their old Sort JWT tokens', async () => {
-        const jwt1 = SortHubJwt.create({ user: { id } })
+        const jwt1 = SortWebJwt.create({ user: { id } })
 
         await new Promise(resolve => setTimeout(resolve, 1000))
 
@@ -388,7 +388,7 @@ describe('v2/routes/special/users.route', () => {
 
         await new Promise(resolve => setTimeout(resolve, 1500))
 
-        const jwt2 = SortHubJwt.create({ user: { id } })
+        const jwt2 = SortWebJwt.create({ user: { id } })
         const profileRes2 = await server.inject({
           method: 'GET',
           url: '/v2/my/profile',
@@ -421,7 +421,7 @@ describe('v2/routes/special/users.route', () => {
       })
 
       it('replies with 400', async () => {
-        const sorthubJwt = SortHubJwt.create({
+        const sortwebJwt = SortWebJwt.create({
           user: { id }
         })
         const emailJwt = EmailVerificationJwt.create({
@@ -429,7 +429,7 @@ describe('v2/routes/special/users.route', () => {
         })
         const response = await server.inject({
           headers: {
-            authorization: `bearer ${sorthubJwt}`
+            authorization: `bearer ${sortwebJwt}`
           },
           method: 'PATCH',
           body: {
@@ -462,17 +462,17 @@ describe('v2/routes/special/users.route', () => {
         const mockedUser = userMock.create()
         await UserService.createUser(mockedUser)
 
-        const sorthubJwt = SortHubJwt.create({
+        const sortwebJwt = SortWebJwt.create({
           user: { id: mockedUser.id }
         })
 
         const response = await server.inject({
           headers: {
-            authorization: `bearer ${sorthubJwt}`
+            authorization: `bearer ${sortwebJwt}`
           },
           method: 'PATCH',
           body: {
-            key: sorthubJwt,
+            key: sortwebJwt,
             subscribe: true
           },
           url: '/v2/special/users/verify-email'
@@ -501,7 +501,7 @@ describe('v2/routes/special/users.route', () => {
         const mockedUser = userMock.create()
         await UserService.createUser(mockedUser)
 
-        const sorthubJwt = SortHubJwt.create({
+        const sortwebJwt = SortWebJwt.create({
           user: { id: mockedUser.id }
         })
 
@@ -514,7 +514,7 @@ describe('v2/routes/special/users.route', () => {
 
         const response = await server.inject({
           headers: {
-            authorization: `bearer ${sorthubJwt}`
+            authorization: `bearer ${sortwebJwt}`
           },
           method: 'PATCH',
           body: {
@@ -545,13 +545,13 @@ describe('v2/routes/special/users.route', () => {
 
     describe('success cases', () => {
       let user: Awaited<ReturnType<typeof UserService.createUser>>
-      let sorthubJwt: string
+      let sortwebJwt: string
       let emailJwt: string
       beforeEach(async () => {
         const mockedUser = userMock.create({ email_verified: false })
         user = await UserService.createUser(mockedUser)
 
-        sorthubJwt = SortHubJwt.create({ user: { id: user.id } })
+        sortwebJwt = SortWebJwt.create({ user: { id: user.id } })
         emailJwt = EmailVerificationJwt.create({
           user: {
             id: user.id,
@@ -572,7 +572,7 @@ describe('v2/routes/special/users.route', () => {
 
             const response = await server.inject({
               headers: {
-                authorization: `bearer ${sorthubJwt}`
+                authorization: `bearer ${sortwebJwt}`
               },
               method: 'PATCH',
               body: {
@@ -610,7 +610,7 @@ describe('v2/routes/special/users.route', () => {
 
             const response = await server.inject({
               headers: {
-                authorization: `bearer ${sorthubJwt}`
+                authorization: `bearer ${sortwebJwt}`
               },
               method: 'PATCH',
               body: {
@@ -649,7 +649,7 @@ describe('v2/routes/special/users.route', () => {
 
             const response = await server.inject({
               headers: {
-                authorization: `bearer ${sorthubJwt}`
+                authorization: `bearer ${sortwebJwt}`
               },
               method: 'PATCH',
               body: {
@@ -686,7 +686,7 @@ describe('v2/routes/special/users.route', () => {
 
             const response = await server.inject({
               headers: {
-                authorization: `bearer ${sorthubJwt}`
+                authorization: `bearer ${sortwebJwt}`
               },
               method: 'PATCH',
               body: {

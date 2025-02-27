@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# We allow to pass two github hashes, one for sorthub and api
+# We allow to pass two github hashes, one for sortweb and api
 
-SORTHUB_GITHUB_SHA=${1:-}
+SORT_WEB_GITHUB_SHA=${1:-}
 API_GITHUB_SHA=${2:-}
 
 if ! aws sts get-caller-identity --no-cli-pager; then
@@ -32,17 +32,17 @@ fi
 
 rsync -aq --progress .. ./deploy/api --exclude node_modules --exclude .git --exclude ".env*" --exclude .DS_Store --exclude .gitignore --exclude deploy
 
-echo "Copying sorthub..."
+echo "Copying sortweb..."
 
-if [ -n "$SORTHUB_GITHUB_SHA" ]; then
-    echo "Checking out sorthub $SORTHUB_GITHUB_SHA"
+if [ -n "$SORT_WEB_GITHUB_SHA" ]; then
+    echo "Checking out sortweb $SORT_WEB_GITHUB_SHA"
     pushd .
-    cd ../../sorthub
-    git checkout $SORTHUB_GITHUB_SHA
+    cd ../../sortweb
+    git checkout $SORT_WEB_GITHUB_SHA
     popd
 fi
 
-rsync -aq --progress ../../sorthub/ ./deploy/sorthub --exclude node_modules --exclude .git --exclude ".env*" --exclude .DS_Store --exclude .gitignore --exclude deploy
+rsync -aq --progress ../../sortweb/ ./deploy/sortweb --exclude node_modules --exclude .git --exclude ".env*" --exclude .DS_Store --exclude .gitignore --exclude deploy
 
 echo "Creating tarball..."
 

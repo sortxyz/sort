@@ -36,7 +36,7 @@ export class UserMock {
     return mock
   }
 
-  createSorthubServiceAccount(values: Partial<SortUser> = {}) {
+  createSortWebServiceAccount(values: Partial<SortUser> = {}) {
     return this.create({
       ...values,
       email: getConfig().SORTUI_SERVICE_ACCOUNT_EMAIL

@@ -119,7 +119,7 @@ export const OnPremAuthJwt = JwtFactory<
   SortOnPremJWT
 >({
   issuer: "sort.xyz",
-  subject: "sorthub-onprem-auth",
+  subject: "sortweb-onprem-auth",
   audience: "sort.xyz",
 });
 

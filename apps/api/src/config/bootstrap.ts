@@ -36,7 +36,7 @@ const configSchema = Type.Object({
   USER_FACING_EXTERNAL_DB_CONNECTION_TIMEOUT_MS: Type.Number({
     default: 10000
   }),
-  SORTHUB_HOST: Type.String(),
+  SORT_WEB_HOST: Type.String(),
   SORT_JWT_SECRET: Type.String(),
   AUTH0_ISSUER_BASE_URL: Type.Optional(Type.String()),
   SORT_SESSION_REVOKE_SECRET: Type.String(),
@@ -57,12 +57,12 @@ declare module '@sort/config' {
 }
 
 const postEnvLoad = (env: Record<string, unknown>) => {
-  // SORTHUB_HOST is used in Invite templates for links to our UI where the
+  // SORT_WEB_HOST is used in Invite templates for links to our UI where the
   // customer accepts the invite. For both production and local testing its
   // clear what the origin should be. However, in staging we don't know the
   // domain of the vercel preview env so we just default to production.
-  if (!env.SORTHUB_HOST) {
-    env.SORTHUB_HOST = env.IS_PROD_ENV
+  if (!env.SORT_WEB_HOST) {
+    env.SORT_WEB_HOST = env.IS_PROD_ENV
       ? 'https://sort.xyz'
       : 'http://localhost:3000'
   }

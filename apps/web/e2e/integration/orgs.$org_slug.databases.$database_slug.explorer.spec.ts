@@ -492,7 +492,7 @@ test(
   {
     annotation: {
       type: "issue",
-      description: "https://github.com/sortxyz/sorthub/issues/895",
+      description: "https://github.com/sortxyz/sortweb/issues/895",
     },
   },
   async ({ page, organization, database, table, schema }) => {

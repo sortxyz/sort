@@ -8,7 +8,7 @@
  * 2) Proxies requests to our webflow marketing pages
  *
  * If we are not in maintenance mode and the request is not for a webflow
- * page, the request is passed through to Sorthub.
+ * page, the request is passed through to SortWeb.
  *
  * ## Maintenance Mode
  *

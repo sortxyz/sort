@@ -23,9 +23,9 @@ import { HEADER_AUTHORIZATION } from '../../../global/constants/header.constant'
 import { getDb } from '../../../global/services/kysely.service'
 import { isFeatureEnabled } from '../../../global/utils/feature-flag.util'
 import {
-  SortHubJwt,
+  SortWebJwt,
   EmailVerificationJwt,
-  SortHubOnPremJwt
+  SortWebOnPremJwt
 } from '../../utils/jwt.util'
 import { getAuthorizationBearer } from '../../utils/route.util'
 
@@ -187,7 +187,7 @@ export const initializeUser = async (
     }
   }
 
-  const jwt = SortHubJwt.create({ user: { id: userId } })
+  const jwt = SortWebJwt.create({ user: { id: userId } })
   return reply.status(200).send({
     type: 'initialize_user',
     payload: {
@@ -256,7 +256,7 @@ export const initializeOnPremUser = async (
       return reply.status(404).send(default404)
     }
 
-    verifiedAuth = await SortHubOnPremJwt.verify(authJWT)
+    verifiedAuth = await SortWebOnPremJwt.verify(authJWT)
     if (!verifiedAuth?.sub) {
       request.log.info({ verifiedAuth }, 'Missing Auth JWT sub (user id)')
       return reply.status(404).send(default404)
@@ -321,7 +321,7 @@ export const initializeOnPremUser = async (
 
   await UserService.trackLogin(user)
 
-  const jwt = SortHubJwt.create({ user: { id: userId } })
+  const jwt = SortWebJwt.create({ user: { id: userId } })
   return reply.status(200).send({
     type: 'initialize_onprem_user',
     payload: {

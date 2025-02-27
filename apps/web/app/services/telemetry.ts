@@ -15,7 +15,7 @@ export class Telemetry {
           tracesSampleRate: 0.1,
           tracePropagationTargets: [
             "localhost",
-            /^https:\/\/sorthub.*\.vercel\.app/,
+            /^https:\/\/sortweb.*\.vercel\.app/,
             /^https:\/\/.*\.sort.xyz/,
           ],
           replaysSessionSampleRate: 0.1,
