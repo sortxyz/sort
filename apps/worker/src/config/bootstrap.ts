@@ -62,16 +62,13 @@ const postEnvLoad = (env: Record<string, unknown>) => {
     if (!env.SORT_PUBLIC_BOT_SERVICE_ACCOUNT_EMAIL) {
       env.SORT_PUBLIC_BOT_SERVICE_ACCOUNT_EMAIL = 'svc-sort-bot-test@sort.xyz'
     }
-
-    if (!env.MAILGUN_ALL_CUSTOMERS_LIST) {
-      env.MAILGUN_ALL_CUSTOMERS_LIST =
-        'all@sandbox7e4efdd6b47e4c2e934d48a4930dbffe.mailgun.org'
-    }
   }
 
   if (env.IS_TEST_ENV) {
-    env.MAILGUN_DOMAIN = 'test'
-    env.MAILGUN_API_KEY = 'test'
+    env.MAILGUN_DOMAIN = 'fake'
+    env.MAILGUN_API_KEY = 'fake'
+    env.MAILGUN_ALL_CUSTOMERS_LIST = 'fake@example.com'
+
     env.EXTERNAL_DB_CONNECTION_TIMEOUT_MS = 5000
     env.USER_FACING_EXTERNAL_DB_CONNECTION_TIMEOUT_MS = 5000
 
