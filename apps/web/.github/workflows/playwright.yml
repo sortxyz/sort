@@ -1,0 +1,41 @@
+name: Playwright Tests
+on:
+  deployment_status:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    if: github.event.deployment_status.state == 'success'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build Packages
+        run: pnpm build:packages
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Run Playwright tests
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        env:
+          SORT_WEB_API_BASE_URL: ${{ secrets.SORT_WEB_API_BASE_URL }}
+          SORT_WEB_SESSION_SECRET: ${{ secrets.SORT_WEB_SESSION_SECRET }}
+          TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          TEST_RUN_AI_SUITE: ${{ contains( toJson(github), 'ai-test-suite' ) }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Upload playwright-report to GitHub Actions Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 14

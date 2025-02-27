@@ -173,7 +173,7 @@ export const sendIssueNotification = async ({
   source: string
 }) => {
   try {
-    const issueLink = `${getConfig().SORTHUB_HOST}/orgs/${org.slug}/databases/${
+    const issueLink = `${getConfig().SORT_WEB_HOST}/orgs/${org.slug}/databases/${
       database.slug
     }/issues/${issue.issue_number}`
 
@@ -287,7 +287,7 @@ export const sendChangeRequestNotification = async ({
   source: string
 }) => {
   try {
-    const link = `${getConfig().SORTHUB_HOST}/orgs/${org.slug}/databases/${
+    const link = `${getConfig().SORT_WEB_HOST}/orgs/${org.slug}/databases/${
       database.slug
     }/change-requests/${changeRequest.change_request_number}`
     const subject = `📊 ${org.name}/${database.raw_name} :: ${changeRequest.title} (Change Request #${changeRequest.change_request_number})`
@@ -438,7 +438,7 @@ export const sendVerificationEmail = async ({
   try {
     const subject = '📊 Confirm your email address'
     const template = 'email confirmation'
-    const url = `${getConfig().SORTHUB_HOST}/confirm/email`
+    const url = `${getConfig().SORT_WEB_HOST}/confirm/email`
     const link = `${url}?key=${key}`
 
     const emailResult = await sendEmailNotification(
@@ -532,7 +532,7 @@ export const sendOrgInviteEmail = async ({
   const subject = `📊 ${fromName} invited you to join ${orgName} on Sort`
   const template = 'invite'
 
-  const host = getConfig().SORTHUB_HOST
+  const host = getConfig().SORT_WEB_HOST
   const inviteLink = `${host}/orgs/${org.slug}/invites/${inviteId}`
 
   const emailResult = await sendEmailNotification(

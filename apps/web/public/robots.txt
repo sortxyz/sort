@@ -1,0 +1,17 @@
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: *
+Disallow: /my/*
+Disallow: /search
+Disallow: /api/*
+Disallow: /explore
+Disallow: /orgs/new
+Disallow: /orgs/*/settings
+Disallow: /orgs/*/settings/*
+Disallow: /orgs/*/invites
+Disallow: /orgs/*/invites/*
+Disallow: /orgs/*/databases
+Disallow: /orgs/*/databases/*
+Disallow: /orgs/*/members
+Disallow: /orgs/*/members/*

@@ -28,7 +28,7 @@ following:
 
 - `directory` The directory in which to look for the configuration file (`.env.{production,development,test}`).
 - `schema` The `@sinclari/typebox` schema of the expected configuration object. This is used to validate the environment configuration.
-- `postEnvLoad` An optional function which when provided is passed the parsed environment configuration object before it is validated against the given `schema`. This is commonly used to set custom properties, the values of which won't be known until the base environment configuration has been loaded. Example: set SORTHUB_HOST to 'localhost' if env.SERVICE_URL is also 'localhost'.
+- `postEnvLoad` An optional function which when provided is passed the parsed environment configuration object before it is validated against the given `schema`. This is commonly used to set custom properties, the values of which won't be known until the base environment configuration has been loaded. Example: set SORT_WEB_HOST to 'localhost' if env.SERVICE_URL is also 'localhost'.
 
 ```ts
 import { configure } from '@sort/config'
@@ -52,8 +52,8 @@ import { configure } from '@sort/config'
 import { Type } from '@sinclair/typebox'
 
 const postEnvLoad = (env: Record<string, unknown>) => {
-  if (!env.SORTHUB_HOST && env.IS_TEST_ENV) {
-    env.SORTHUB_HOST = 'http://localhost:3000'
+  if (!env.SORT_WEB_HOST && env.IS_TEST_ENV) {
+    env.SORT_WEB_HOST = 'http://localhost:3000'
   }
 }
 const config = configure({ directory: __dirname, schema: Type.Object(..), postEnvLoad })
@@ -63,7 +63,7 @@ console.log(config)
 //   APP_VERSION: 'e37eb1b466e1',
 //   LOG_LEVEL: 'info',
 //   IS_TEST_ENV: true,
-//   SORTHUB_HOST: 'http://localhost:3000'
+//   SORT_WEB_HOST: 'http://localhost:3000'
 //   IS_PROD_ENV: ...
 // }
 ```

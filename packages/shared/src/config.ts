@@ -26,7 +26,7 @@ const configSchema = Type.Object({
   SLACK_WEBHOOK_URL: Type.Optional(Type.String()),
   SORT_PUBLIC_BOT_SERVICE_ACCOUNT_EMAIL: Type.String(), // the public service account used by change request worker
   CUSTOMER_QUERY_TIMEOUT_MS: Type.Number({ default: 30000 }),
-  SORTHUB_HOST: Type.String(),
+  SORT_WEB_HOST: Type.String(),
   IS_LOCAL_DB_CONNECTION_OK: Type.Boolean({ default: false }),
   // connection strings for testing
   TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING: Type.Optional(Type.String()),
@@ -38,12 +38,12 @@ const configSchema = Type.Object({
 export type SortKyselyConfig = Static<typeof configSchema>
 
 const postEnvLoad = (env: Record<string, unknown>) => {
-  // SORTHUB_HOST is used in Invite templates for links to our UI where the
+  // SORT_WEB_HOST is used in Invite templates for links to our UI where the
   // customer accepts the invite. For both production and local testing its
   // clear what the origin should be. However, in staging we don't know the
   // domain of the vercel preview env so we just default to production.
-  if (!env.SORTHUB_HOST) {
-    env.SORTHUB_HOST = /localhost/i.test(String(env.SERVICE_URL))
+  if (!env.SORT_WEB_HOST) {
+    env.SORT_WEB_HOST = /localhost/i.test(String(env.SERVICE_URL))
       ? 'http://localhost:3000'
       : 'https://sort.xyz'
   }

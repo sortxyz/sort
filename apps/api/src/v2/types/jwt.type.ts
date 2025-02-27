@@ -1,6 +1,6 @@
 // JWT spec: https://tools.ietf.org/html/rfc7519
 
-// Used for Sorthub -> API communication
+// Used for SortWeb -> API communication
 export type SortJWT = {
   user: {
     id: string
@@ -24,7 +24,7 @@ export type EmailVerificationJWT = {
   [key: string]: unknown
 }
 
-// Used for Sorthub Auth0 -> User authentication and set up
+// Used for SortWeb Auth0 -> User authentication and set up
 export type Auth0JWT = {
   sub: string
   nickname?: string
@@ -41,7 +41,7 @@ export type Auth0JWT = {
   [key: string]: unknown
 }
 
-// Used for Sorthub OnPrem -> User authentication and set up
+// Used for SortWeb OnPrem -> User authentication and set up
 export type SortOnPremJWT = {
   user: {
     email: string

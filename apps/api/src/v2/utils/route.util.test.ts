@@ -9,7 +9,7 @@ import * as UserService from '@sort/shared/services/user.service'
 import { config } from '../../config/bootstrap'
 import { createFastifyMockLogger } from '../mocks/fastify-logger.mock'
 
-import { SortHubJwt, EmailVerificationJwt, auth0JwtTestSign } from './jwt.util'
+import { SortWebJwt, EmailVerificationJwt, auth0JwtTestSign } from './jwt.util'
 import {
   checkAuthentication,
   notFoundHandler,
@@ -163,7 +163,7 @@ describe('v2/utils/route.utils', () => {
       const spyGetUserByApiKey = jest.spyOn(APIKeyService, 'getUserByAPIKey')
 
       // @ts-expect-error - forcing invalid Sort JWT
-      const bearer = SortHubJwt.create({ invalid: true })
+      const bearer = SortWebJwt.create({ invalid: true })
 
       await checkAuthentication()(
         {
@@ -194,7 +194,7 @@ describe('v2/utils/route.utils', () => {
       const spyGetUserByApiKey = jest.spyOn(APIKeyService, 'getUserByAPIKey')
 
       const userId = 'h3ll0'
-      const bearer = SortHubJwt.create({ user: { id: userId } })
+      const bearer = SortWebJwt.create({ user: { id: userId } })
 
       await checkAuthentication()(
         {
@@ -224,7 +224,7 @@ describe('v2/utils/route.utils', () => {
       const mockStatus = jest.fn(() => ({ send: mockSend }) as any)
 
       const userId = 'h3ll0'
-      const bearer = SortHubJwt.create({ user: { id: userId } })
+      const bearer = SortWebJwt.create({ user: { id: userId } })
 
       const spyGetUserById = jest
         .spyOn(UserService, 'getUserById')
@@ -340,7 +340,7 @@ describe('v2/utils/route.utils', () => {
         describe(description, () => {
           const user = userMock.create({ email })
           const apiKey = apiKeyMock.create({ user_id: user.id })
-          const bearer = SortHubJwt.create({ user: { id: user.id } })
+          const bearer = SortWebJwt.create({ user: { id: user.id } })
 
           describe.each([
             { 'x-api-key': apiKey.api_key },
@@ -389,7 +389,7 @@ describe('v2/utils/route.utils', () => {
       describe('when not set', () => {
         testAuthenticationRule({
           restriction: undefined,
-          description: 'when sorthub account is authenticating',
+          description: 'when sortweb account is authenticating',
           label: 'defaults to isCustomerAccount and fails validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -415,7 +415,7 @@ describe('v2/utils/route.utils', () => {
       describe('when set to isCustomerAccount', () => {
         testAuthenticationRule({
           restriction: 'isCustomerAccount',
-          description: 'when sorthub account is authenticating',
+          description: 'when sortweb account is authenticating',
           label: 'it fails validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -441,7 +441,7 @@ describe('v2/utils/route.utils', () => {
       describe('when set to isPublicAccount', () => {
         testAuthenticationRule({
           restriction: 'isPublicAccount',
-          description: 'when sorthub account is authenticating',
+          description: 'when sortweb account is authenticating',
           label: 'it passes validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -480,7 +480,7 @@ describe('v2/utils/route.utils', () => {
 
         testAuthenticationRule({
           restriction: 'isAccount',
-          description: 'when sorthub account is authenticating',
+          description: 'when sortweb account is authenticating',
           label: 'it passes validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {

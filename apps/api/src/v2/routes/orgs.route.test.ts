@@ -613,7 +613,7 @@ describe('/v2 organizations routes', () => {
 
       describe('when the sortui service account is used', () => {
         const slug = String(Math.random())
-        const svcAccount = userMock.createSorthubServiceAccount()
+        const svcAccount = userMock.createSortWebServiceAccount()
 
         beforeEach(async () => {
           await UserService.createUser(svcAccount)

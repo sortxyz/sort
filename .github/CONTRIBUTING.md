@@ -154,8 +154,8 @@ export const getMyHiddenThingsSchema = {
 }
 ```
 
-[UI]: https://github.com/sortxyz/sorthub
-[local-login]: https://github.com/sortxyz/sorthub#common-issues
+[UI]: https://github.com/sortxyz/sortweb
+[local-login]: https://github.com/sortxyz/sortweb#common-issues
 
 # apps/worker
 

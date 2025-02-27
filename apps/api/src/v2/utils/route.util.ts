@@ -15,7 +15,7 @@ import {
 } from '../../global/constants/header.constant'
 import { toServerErrorMessage } from '../../global/utils/error.util'
 
-import { SortHubJwt, auth0JwtVerify } from './jwt.util'
+import { SortWebJwt, auth0JwtVerify } from './jwt.util'
 import { convertValidationErrors } from './route-validation.util'
 
 import type {
@@ -53,8 +53,8 @@ export type authRestriction =
  * @param restriction - The restriction to apply to the user. The default is 'isCustomerAccount'.
  * @example
  *  'isCustomerAccount' - The user must be a customer.
- *  'isPublicAccount' - The user must be the SortHub service account.
- *  'isAccount' - Either a customer or the SortHub service account.
+ *  'isPublicAccount' - The user must be the SortWeb service account.
+ *  'isAccount' - Either a customer or the SortWeb service account.
  */
 export const checkAuthentication =
   (restriction: authRestriction = 'isCustomerAccount') =>
@@ -90,7 +90,7 @@ export const checkAuthentication =
           return reply.status(401).send(defaultFailure)
         }
 
-        const verifiedJWT = await SortHubJwt.verify(sortJWT)
+        const verifiedJWT = await SortWebJwt.verify(sortJWT)
 
         if (!verifiedJWT.user?.id) {
           request.log.info({ verifiedJWT }, 'Missing Sort JWT user id')

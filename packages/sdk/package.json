@@ -1,0 +1,23 @@
+{
+  "author": "Sort",
+  "description": "Sort SDK",
+  "devDependencies": {
+    "typescript": "5.7.3"
+  },
+  "keywords": [
+    "sdk"
+  ],
+  "license": "UNLICENSED",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "name": "@sort/sdk",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "dev": "tsc -w"
+  },
+  "type": "module",
+  "types": "lib/index.d.ts",
+  "version": "1.0.0"
+}

@@ -21,7 +21,6 @@
   "engines": {
     "node": "22.x"
   },
-  "packageManager": "pnpm@9.0.4",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -31,5 +30,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "syncpack": "^13.0.2"
-  }
+  },
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b"
 }

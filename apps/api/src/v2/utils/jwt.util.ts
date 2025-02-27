@@ -105,14 +105,14 @@ export const JwtFactory = <
   }
 }
 
-export const SortHubJwt = JwtFactory<{ user: { id: string } }, SortJWT>({
+export const SortWebJwt = JwtFactory<{ user: { id: string } }, SortJWT>({
   issuer: 'sort.xyz',
   subject: 'session',
   audience: 'sort.xyz'
 })
 
 // convenience
-export const createSortJwt = (id: string) => SortHubJwt.create({ user: { id } })
+export const createSortJwt = (id: string) => SortWebJwt.create({ user: { id } })
 
 export const EmailVerificationJwt = JwtFactory<
   { user: { id: string; email: string } },
@@ -123,11 +123,11 @@ export const EmailVerificationJwt = JwtFactory<
   audience: 'sort.xyz'
 })
 
-export const SortHubOnPremJwt = JwtFactory<
+export const SortWebOnPremJwt = JwtFactory<
   { user: { email: string } },
   SortOnPremJWT
 >({
   issuer: 'sort.xyz',
-  subject: 'sorthub-onprem-auth',
+  subject: 'sortweb-onprem-auth',
   audience: 'sort.xyz'
 })

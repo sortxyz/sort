@@ -1,4 +1,4 @@
-import { auth0JwtTestSign, SortHubJwt } from '../utils/jwt.util'
+import { auth0JwtTestSign, SortWebJwt } from '../utils/jwt.util'
 
 export const auth0JwtDecodedMock = {
   sub: 'auth0|64add1c91d395800db1601ba',
@@ -17,4 +17,4 @@ export const sortJwtDecodedMock = {
   user: { id: 'Riju' }
 }
 
-export const sortJwtMock = SortHubJwt.create(sortJwtDecodedMock)
+export const sortJwtMock = SortWebJwt.create(sortJwtDecodedMock)

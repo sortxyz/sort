@@ -1,0 +1,13 @@
+{
+  "playwright.env": {
+    // replace with your own test base url
+    // "TEST_BASE_URL": "http://localhost:3000"
+  },
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
