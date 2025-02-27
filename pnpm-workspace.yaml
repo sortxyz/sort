@@ -1,9 +1,16 @@
 packages:
-  - "packages/config"
-  - "packages/logger"
-  - "packages/shared"
-  - "packages/shutdown"
-  - "packages/sdk"
-  - "apps/worker"
-  - "apps/api"
-  - "apps/web"
+  - packages/config
+  - packages/logger
+  - packages/shared
+  - packages/shutdown
+  - packages/sdk
+  - apps/worker
+  - apps/api
+  - apps/web
+onlyBuiltDependencies:
+  - '@quobix/vacuum'
+  - '@sentry/cli'
+  - '@swc/core'
+  - '@vercel/speed-insights'
+  - core-js
+  - esbuild
