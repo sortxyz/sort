@@ -46,6 +46,7 @@ test.describe("Intent Query Operations", () => {
     // Navigate to query page
     await page.goto(
       `/orgs/${organization.slug}/databases/${database.slug}/explorer/queries/${intentQuery.id}`,
+      { waitUntil: "networkidle" },
     );
 
     // Verify initial state
