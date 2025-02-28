@@ -10,6 +10,8 @@ import {
 } from './global/services/kysely.service'
 import { createServer } from './global/utils/server.util'
 
+process.title = 'sort-api'
+
 const { ENV, SERVICE_PORT, SERVICE_HOST } = config
 
 const runServer = async () => {

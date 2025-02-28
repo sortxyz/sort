@@ -13,7 +13,7 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm deploy --filter=sort-api-v2 --prod /prod/api
-RUN pnpm deploy --filter=@sort/change-request-worker --prod /prod/worker
+RUN pnpm deploy --filter=@sort/worker --prod /prod/worker
 
 FROM base AS api
 COPY --from=build /prod/api /prod/api
