@@ -78,6 +78,8 @@ test("can view on orgs page", async ({ page, organization }) => {
 });
 
 test("can update", async ({ page, organization }) => {
+  test.slow();
+
   await page.goto(`/orgs/${organization.slug}/settings`);
   organization.name = faker.company.name();
   organization.slug = toSlugString(organization.name);

@@ -1,0 +1,118 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+env:
+  NODE_ENV: test
+  AUTH0_ISSUER_BASE_URL: ${{ secrets.AUTH0_ISSUER_BASE_URL }}
+  SORT_SESSION_REVOKE_SECRET: ${{ secrets.SORT_SESSION_REVOKE_SECRET }}
+  TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING }}
+  TEST_SNOWFLAKE_HYBRID_USER: ${{ secrets.TEST_SNOWFLAKE_HYBRID_USER }}
+  TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING }}
+  TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING: ${{ secrets.TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING }}
+  DB_FIELD_ENCRYPTION_KEY: testing
+
+jobs:
+  test-e2e:
+    name: Test end-to-end
+    runs-on: ubuntu-e2e
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: 'pnpm'
+      - name: install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+      - name: start infra
+        run: |
+          pnpm run --filter '@sort/shared' infra:up
+      - name: create test user
+        id: create-test-user
+        run: |
+          # generate the user
+          OUTPUT=$(pnpm run --filter 'sort-api-v2' db:create-test-user)
+
+          # extract the API key
+          KEY="$(echo "$OUTPUT" | grep -E 'API key: ' | cut -d':' -f2-)"
+
+          # trim space
+          KEY="${KEY#"${KEY%%[![:space:]]*}"}"
+          KEY="${KEY%"${KEY##*[![:space:]]}"}"
+
+          # set env
+          echo "SORT_SERVICE_ACCOUNT_API_KEY=$KEY" >> $GITHUB_ENV
+      - name: start api
+        env:
+          NODE_ENV: development
+          HEALTH_SERVICE_PORT: 8082
+          SORT_WEB_HOST: http://localhost:3000
+          SORT_JWT_SECRET: testing
+        run: |
+          pnpm run --filter 'sort-api-v2' start &
+      - name: start worker
+        env:
+          NODE_ENV: development
+          HEALTH_SERVICE_PORT: 8081
+          SORT_WEB_HOST: http://localhost:3000
+          SORT_JWT_SECRET: testing
+          SORT_FEAT_ENABLE_CHANGE_REQUESTS: true
+        run: |
+          pnpm run --filter '@sort/worker' start &
+      - name: build @sort/web
+        run: pnpm --filter '@sort/web' build
+      - name: Install Playwright Browsers
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Start @sort/web
+        working-directory: apps/web
+        run: pnpm start &
+        env:
+          SORT_WEB_API_BASE_URL: http://127.0.0.1:8080/
+          SORT_WEB_SESSION_SECRET: ${{ secrets.SORT_WEB_SESSION_SECRET }}
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          TEST_RUN_AI_SUITE: ${{ contains( toJson(github), 'ai-test-suite' ) }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
+          AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          SORT_AUTH: auth0
+          SORT_WEB_CHANGE_REQUESTS_ENABLED: 1
+          SORT_WEB_DESCRIBE_CHANGES_ENABLED: 1
+      - name: Run @sort/web e2e tests
+        working-directory: apps/web
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        env:
+          SORT_WEB_API_BASE_URL: http://127.0.0.1:8080/
+          SORT_WEB_SESSION_SECRET: ${{ secrets.SORT_WEB_SESSION_SECRET }}
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          TEST_RUN_AI_SUITE: ${{ contains( toJson(github), 'ai-test-suite' ) }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+      - name: Upload playwright-report to GitHub Actions Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: apps/web/playwright-report/
+          retention-days: 14
+      - name: stop api
+        if: always()
+        run: pkill -f "sort-api" || true
+      - name: stop worker
+        if: always()
+        run: pkill -f "sort-worker" || true
+      - name: stop infra
+        if: always()
+        run: |
+          pnpm run --filter '@sort/shared' infra:down || true

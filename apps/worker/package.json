@@ -1,6 +1,6 @@
 {
-  "name": "@sort/change-request-worker",
-  "description": "Execution Worker for Sort",
+  "name": "@sort/worker",
+  "description": "Sort worker",
   "version": "1.0.267",
   "main": "dist/index.js",
   "private": true,

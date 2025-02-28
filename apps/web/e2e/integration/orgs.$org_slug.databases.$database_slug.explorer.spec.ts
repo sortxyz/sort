@@ -196,35 +196,24 @@ test.describe("intent queries", () => {
     await expect(page.getByRole("row")).toHaveCount(5);
 
     await page.getByRole("button", { name: "test_uuid" }).click();
-    await page
-      .getByRole("link", { name: "Loading... Data Explorer" })
-      .waitFor();
-    await page
-      .getByRole("link", { name: "Data Explorer", exact: true })
-      .waitFor();
+    await expect(
+      page.getByRole("columnheader", { name: "test_uuid" }),
+    ).toHaveAttribute("aria-sort", "ascending");
+
     await page.getByRole("button", { name: "test_uuid" }).click();
-    await page
-      .getByRole("link", { name: "Loading... Data Explorer" })
-      .waitFor();
-    await page
-      .getByRole("link", { name: "Data Explorer", exact: true })
-      .waitFor();
-    await page.getByRole("button", { name: "test_text" }).click();
-    await page
-      .getByRole("link", { name: "Loading... Data Explorer" })
-      .waitFor();
-    await page
-      .getByRole("link", { name: "Data Explorer", exact: true })
-      .waitFor();
-
-    await expect(page.getByRole("row")).toHaveCount(5);
-
     await expect(
       page.getByRole("columnheader", { name: "test_uuid" }),
     ).toHaveAttribute("aria-sort", "descending");
+
+    await page.getByRole("button", { name: "test_text" }).click();
     await expect(
       page.getByRole("columnheader", { name: "test_text" }),
     ).toHaveAttribute("aria-sort", "ascending");
+    await expect(
+      page.getByRole("columnheader", { name: "test_uuid" }),
+    ).toHaveAttribute("aria-sort", "descending");
+
+    await expect(page.getByRole("row")).toHaveCount(5);
   });
 
   test("can add / remove columns", async ({
@@ -305,19 +294,14 @@ test.describe("intent queries", () => {
 
     // define a sort order by the same column
     await page.getByRole("button", { name: "test_numeric numeric" }).click();
-    await page
-      .getByRole("link", { name: "Loading... Data Explorer" })
-      .waitFor();
-    await page
-      .getByRole("link", { name: "Data Explorer", exact: true })
-      .waitFor();
+    await expect(
+      page.getByRole("columnheader", { name: "test_numeric" }),
+    ).toHaveAttribute("aria-sort", "ascending");
+
     await page.getByRole("button", { name: "test_numeric numeric" }).click();
-    await page
-      .getByRole("link", { name: "Loading... Data Explorer" })
-      .waitFor();
-    await page
-      .getByRole("link", { name: "Data Explorer", exact: true })
-      .waitFor();
+    await expect(
+      page.getByRole("columnheader", { name: "test_numeric" }),
+    ).toHaveAttribute("aria-sort", "descending");
 
     // save the query
     const queryName = "test query";

@@ -48,7 +48,7 @@ jobs:
           pnpm run --filter '@sort/logger' test
       - name: run apps/worker tests
         run: |
-          pnpm run --filter '@sort/change-request-worker' test
+          pnpm run --filter '@sort/worker' test
       - name: run apps/api tests
         run: |
           pnpm run --filter 'sort-api-v2' test:all
