@@ -74,24 +74,31 @@ jobs:
       - name: Install Playwright Browsers
         working-directory: apps/web
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
-      - name: Run @sort/web e2e tests
+      - name: Start @sort/web
         working-directory: apps/web
-        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        run: pnpm start &
         env:
-          # required for e2e tests
           SORT_WEB_API_BASE_URL: http://127.0.0.1:8080/
           SORT_WEB_SESSION_SECRET: ${{ secrets.SORT_WEB_SESSION_SECRET }}
           TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
           TEST_RUN_AI_SUITE: ${{ contains( toJson(github), 'ai-test-suite' ) }}
           TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-          # required to start the app
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
           SORT_AUTH: auth0
-          # feature flags
           SORT_WEB_CHANGE_REQUESTS_ENABLED: 1
           SORT_WEB_DESCRIBE_CHANGES_ENABLED: 1
+      - name: Run @sort/web e2e tests
+        working-directory: apps/web
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        env:
+          SORT_WEB_API_BASE_URL: http://127.0.0.1:8080/
+          SORT_WEB_SESSION_SECRET: ${{ secrets.SORT_WEB_SESSION_SECRET }}
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          TEST_RUN_AI_SUITE: ${{ contains( toJson(github), 'ai-test-suite' ) }}
+          TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
       - name: Upload playwright-report to GitHub Actions Artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
