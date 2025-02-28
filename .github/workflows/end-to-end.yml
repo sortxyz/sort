@@ -7,18 +7,23 @@ on:
   pull_request:
 env:
   NODE_ENV: test
+  AUTH0_ISSUER_BASE_URL: ${{ secrets.AUTH0_ISSUER_BASE_URL }}
   SORT_SESSION_REVOKE_SECRET: ${{ secrets.SORT_SESSION_REVOKE_SECRET }}
   TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_HYBRID_CONNECTION_STRING }}
   TEST_SNOWFLAKE_HYBRID_USER: ${{ secrets.TEST_SNOWFLAKE_HYBRID_USER }}
   TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING: ${{ secrets.TEST_SNOWFLAKE_UNLOCK_CONNECTION_STRING }}
   TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING: ${{ secrets.TEST_POSTGRES_AIR_QUALITY_CONNECTION_STRING }}
+  DB_FIELD_ENCRYPTION_KEY: testing
 
 jobs:
-  start-e2e-backend:
-    name: Start backend
-    runs-on: ubuntu-latest-8-core
-    outputs:
-      test-user-api-key: ${{ steps.create-test-user.outputs.API_KEY }}
+  test-e2e:
+    name: Test end-to-end
+    runs-on: ubuntu-e2e
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -45,41 +50,25 @@ jobs:
           KEY="${KEY#"${KEY%%[![:space:]]*}"}"
           KEY="${KEY%"${KEY##*[![:space:]]}"}"
 
-          echo "API_KEY=$KEY" >> $GITHUB_OUTPUT
+          # set env
+          echo "SORT_SERVICE_ACCOUNT_API_KEY=$KEY" >> $GITHUB_ENV
       - name: start api
+        env:
+          NODE_ENV: development
+          HEALTH_SERVICE_PORT: 8082
+          SORT_WEB_HOST: http://localhost:3000
+          SORT_JWT_SECRET: testing
         run: |
           pnpm run --filter 'sort-api-v2' start &
       - name: start worker
         env:
+          NODE_ENV: development
           HEALTH_SERVICE_PORT: 8081
+          SORT_WEB_HOST: http://localhost:3000
+          SORT_JWT_SECRET: testing
+          SORT_FEAT_ENABLE_CHANGE_REQUESTS: true
         run: |
           pnpm run --filter '@sort/worker' start &
-  test-e2e:
-    name: Test end-to-end
-    needs: start-e2e-backend
-    runs-on: ubuntu-latest-8-core
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        browser: [chromium, firefox, webkit]
-    steps:
-      # - name: log sort api and worker processes using netstat
-      #   run: |
-      #     netstat -tulnp | grep -E "sort-(worker|api)" || echo "No process found"
-      # - name: log sort api and worker processes using ps
-      #   run: |
-      #     ps aux | grep -E "sort-(worker|api)" | grep -v grep || echo "No process found"
-      # - name: log sort api and worker processes using lsof
-      #   run: |
-      #     lsof -i -P -n | grep -E "sort-(api|worker)" || echo "No process found"
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: "apps/web/package.json"
-      - name: Install @sort/web dependencies
-        run: pnpm install
       - name: build @sort/web
         run: pnpm --filter '@sort/web' build
       - name: Install Playwright Browsers
@@ -99,11 +88,8 @@ jobs:
           # required to start the app
           AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
           AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
-          AUTH0_ISSUER_BASE_URL: ${{ secrets.AUTH0_ISSUER_BASE_URL }}
-          SORT_SESSION_REVOKE_SECRET: ${{ secrets.SORT_SESSION_REVOKE_SECRET }}
-          SORT_SERVICE_ACCOUNT_API_KEY: ${{ needs.start-e2e-backend.outputs.test-user-api-key }}
           SORT_AUTH: auth0
-          # optional app settings
+          # feature flags
           SORT_WEB_CHANGE_REQUESTS_ENABLED: 1
           SORT_WEB_DESCRIBE_CHANGES_ENABLED: 1
       - name: Upload playwright-report to GitHub Actions Artifacts
@@ -111,20 +97,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.browser }}
-          path: playwright-report/
+          path: apps/web/playwright-report/
           retention-days: 14
-  stop-e2e-backend:
-    name: Stop backend
-    needs: test-e2e
-    runs-on: ubuntu-latest-8-core
-    if: always()
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
       - name: stop api
+        if: always()
         run: pkill -f "sort-api" || true
       - name: stop worker
+        if: always()
         run: pkill -f "sort-worker" || true
       - name: stop infra
+        if: always()
         run: |
-          pnpm run --filter '@sort/shared' infra:down
+          pnpm run --filter '@sort/shared' infra:down || true
