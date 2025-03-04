@@ -18,7 +18,7 @@ env:
 jobs:
   test-e2e:
     name: Test end-to-end
-    runs-on: ubuntu-e2e
+    runs-on: ubuntu-latest-8-core
     timeout-minutes: 60
     strategy:
       fail-fast: false
