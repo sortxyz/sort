@@ -51,7 +51,7 @@ jobs:
           pnpm run --filter '@sort/worker' test
       - name: run apps/api tests
         run: |
-          pnpm run --filter 'sort-api-v2' test:all
+          pnpm run --filter '@sort/api' test:all
       - name: stop infra
         run: |
           pnpm run --filter '@sort/shared' infra:down

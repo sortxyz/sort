@@ -41,7 +41,7 @@ jobs:
         id: create-test-user
         run: |
           # generate the user
-          OUTPUT=$(pnpm run --filter 'sort-api-v2' db:create-test-user)
+          OUTPUT=$(pnpm run --filter '@sort/api' db:create-test-user)
 
           # extract the API key
           KEY="$(echo "$OUTPUT" | grep -E 'API key: ' | cut -d':' -f2-)"
@@ -59,7 +59,7 @@ jobs:
           SORT_WEB_HOST: http://localhost:3000
           SORT_JWT_SECRET: testing
         run: |
-          pnpm run --filter 'sort-api-v2' start &
+          pnpm run --filter '@sort/api' start &
       - name: start worker
         env:
           NODE_ENV: development
