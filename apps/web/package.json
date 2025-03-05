@@ -3,6 +3,9 @@
     "> 0.2% and not dead",
     "maintained node versions"
   ],
+  "files": [
+    "build"
+  ],
   "dependencies": {
     "@codemirror/lang-sql": "6.8.0",
     "@codemirror/state": "6.5.2",
@@ -131,7 +134,7 @@
     "prepare": "husky",
     "pull:env": "vercel env pull .env.local",
     "routes": "react-router routes",
-    "start": "react-router-serve ./build/server/nodejs-eyJtYXhEdXJhdGlvbiI6NjAsInJ1bnRpbWUiOiJub2RlanMifQ/index.js",
+    "start": "react-router-serve ./build/server/index.js",
     "start:dev": "env $(cat .env.local | grep -v \"#\" | xargs) pnpm start",
     "storybook": "storybook dev -p 6006",
     "storybook:dev": "BROWSER=none storybook dev -p 6006",

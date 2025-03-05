@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# We allow to pass two github hashes, one for sortweb and api
+# We allow to pass two github hashes, one for web and api
 
 SORT_WEB_GITHUB_SHA=${1:-}
 API_GITHUB_SHA=${2:-}

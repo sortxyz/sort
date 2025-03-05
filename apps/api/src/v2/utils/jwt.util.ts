@@ -128,6 +128,6 @@ export const SortWebOnPremJwt = JwtFactory<
   SortOnPremJWT
 >({
   issuer: 'sort.xyz',
-  subject: 'sortweb-onprem-auth',
+  subject: 'sort-web-onprem-auth',
   audience: 'sort.xyz'
 })
