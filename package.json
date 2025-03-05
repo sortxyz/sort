@@ -6,6 +6,7 @@
   "scripts": {
     "dev:api": "pnpm run --filter sort-api-v2 dev",
     "dev:worker": "pnpm run --filter @sort/worker dev",
+    "dev:web": "pnpm run --filter @sort/web dev",
     "prepare": "husky",
     "db:reset": "pnpm run --filter sort-api-v2 db:reset",
     "db:codegen": "pnpm run --filter @sort/shared db:codegen",
