@@ -389,7 +389,7 @@ describe('v2/utils/route.utils', () => {
       describe('when not set', () => {
         testAuthenticationRule({
           restriction: undefined,
-          description: 'when sortweb account is authenticating',
+          description: 'when sort-web account is authenticating',
           label: 'defaults to isCustomerAccount and fails validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -415,7 +415,7 @@ describe('v2/utils/route.utils', () => {
       describe('when set to isCustomerAccount', () => {
         testAuthenticationRule({
           restriction: 'isCustomerAccount',
-          description: 'when sortweb account is authenticating',
+          description: 'when sort-web account is authenticating',
           label: 'it fails validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -441,7 +441,7 @@ describe('v2/utils/route.utils', () => {
       describe('when set to isPublicAccount', () => {
         testAuthenticationRule({
           restriction: 'isPublicAccount',
-          description: 'when sortweb account is authenticating',
+          description: 'when sort-web account is authenticating',
           label: 'it passes validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {
@@ -480,7 +480,7 @@ describe('v2/utils/route.utils', () => {
 
         testAuthenticationRule({
           restriction: 'isAccount',
-          description: 'when sortweb account is authenticating',
+          description: 'when sort-web account is authenticating',
           label: 'it passes validation',
           email: SORTUI_SERVICE_ACCOUNT_EMAIL,
           callback: (request, mockStatus, mockSend) => {

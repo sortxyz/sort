@@ -121,12 +121,12 @@ services:
         max-size: "10m"
         max-file: "3"
   sort-web:
-    container_name: sortweb
+    container_name: sort-web
     image: sort-web
     ports:
       - "3000:3000"
     env_file:
-      - path: ./scripts/sortweb/env.onprem
+      - path: ./scripts/sort-web/env.onprem
         required: true
     environment:
       SORT_WEB_API_BASE_URL: ${SORT_WEB_API_BASE_URL:-http://sort-api:8080}
@@ -162,8 +162,8 @@ services:
         condition: service_healthy
         required: true
         restart: true
-  sortweb-nginx-proxy:
-    container_name: sortweb-nginx-proxy
+  sort-web-nginx-proxy:
+    container_name: sort-web-nginx-proxy
     image: nginx:1.27.3
     ports:
       - "80:80"

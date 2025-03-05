@@ -14,6 +14,8 @@ WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm deploy --filter=sort-api-v2 --prod /prod/api
 RUN pnpm deploy --filter=@sort/worker --prod /prod/worker
+RUN pnpm --filter=@sort/web build
+RUN pnpm deploy --filter=@sort/web /prod/web
 
 FROM base AS api
 COPY --from=build /prod/api /prod/api
@@ -30,3 +32,9 @@ WORKDIR /prod/worker
 EXPOSE 8080
 # Max-old-space comes from 3/4 of the container memory - https://nodejs.org/api/cli.html#cli_max_old_space_size_size_in_megabytes
 CMD ["dumb-init", "node", "--max-old-space-size=550", "./dist/index.js"]
+
+FROM base AS web
+COPY --from=build /prod/web /prod/web
+WORKDIR /prod/web
+EXPOSE 3000
+CMD ["dumb-init", "node", "./node_modules/@react-router/serve/dist/cli.js", "./build/server/index.js"]
