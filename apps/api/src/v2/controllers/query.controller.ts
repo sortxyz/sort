@@ -658,7 +658,7 @@ export const listQueries = async (
     }
   }
 
-  // TODO: paging https://github.com/sortxyz/sort-api-v2/issues/655
+  // TODO: paging
   let builder = getDb()
     .selectFrom('query')
     .innerJoin('connection', 'query.connection_id', 'connection.id')

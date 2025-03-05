@@ -138,7 +138,7 @@ export const createServer = async () => {
   await server.register(cors)
 
   if (!IS_TEST_ENV) {
-    // FIXME: support > 1 running server: https://github.com/sortxyz/sort-api-v2/issues/234
+    // FIXME: support > 1 running server
     await server.register(rateLimit, {
       keyGenerator: (request: FastifyRequest) =>
         request.headers[HEADER_API_KEY]?.toString() || request.ip,

@@ -61,7 +61,7 @@
   },
   "homepage": "https://github.com/sortxyz/sort#readme",
   "license": "ISC",
-  "name": "sort-api-v2",
+  "name": "@sort/api",
   "private": true,
   "repository": {
     "type": "git",
