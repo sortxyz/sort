@@ -45,7 +45,7 @@ export const register = (server: FastifyInstance) => {
     // /v2/orgs/connections
     registerConnectionRoutes(server)
     registerConnectionSnapshotRoutes(server)
-
+   
     // /v2/orgs/databases
     registerOrgDatabaseRoutes(server)
 

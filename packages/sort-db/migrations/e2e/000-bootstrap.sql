@@ -1,8 +1,8 @@
 -- This sets up our Neon E2E test database.
 
-CREATE SCHEMA "test";
+CREATE SCHEMA "test_e2e";
 
-CREATE TABLE IF NOT EXISTS test."change_request_test" (
+CREATE TABLE IF NOT EXISTS test_e2e."change_request_test" (
   "id" UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
   "test_uuid" UUID NULL,
   "test_numeric" NUMERIC NULL,
@@ -11,42 +11,42 @@ CREATE TABLE IF NOT EXISTS test."change_request_test" (
   "test_text" TEXT NULL,
   "test_timestamp" TIMESTAMP NULL
 );
-INSERT INTO test.change_request_test (id,test_uuid,test_numeric,test_boolean,test_jsonb,test_text,test_timestamp) VALUES
+INSERT INTO test_e2e.change_request_test (id,test_uuid,test_numeric,test_boolean,test_jsonb,test_text,test_timestamp) VALUES
 	 ('fff5e5f7-fada-4750-bd6b-bb6d3a386795',NULL,3456.789,NULL,'{"works": true}','Hello Warld','2024-07-15 22:09:51.917339'),
 	 ('972d6c8f-fc74-4fc1-9cad-0e03e07a9498','8080808f-1c98-0ad8-843e-0e03e07abbbb',NULL,NULL,NULL,NULL,NULL),
 	 ('9430c3a0-b91d-440e-a46c-9b352a60f31e',NULL,2,true,NULL,'boom','2024-07-16 05:11:57.855906'),
 	 ('a2f717f4-02d8-471b-a9c7-5fe1855fcc4c',NULL,2.1,false,'{"this": {"that": [1]}}','E2E tests!',NULL);
 
-CREATE TABLE IF NOT EXISTS test."change_request_test_required_unknown_fields" (
+CREATE TABLE IF NOT EXISTS test_e2e."change_request_test_required_unknown_fields" (
   "id" UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
   "test_numeric" NUMERIC NULL,
   "test_bytea" BYTEA NOT NULL,
   "test_bit" BIT NULL
 );
-INSERT INTO test.change_request_test_required_unknown_fields (id,test_numeric,test_bytea,test_bit) VALUES
+INSERT INTO test_e2e.change_request_test_required_unknown_fields (id,test_numeric,test_bytea,test_bit) VALUES
 	 ('99897900-dc03-4cb1-9b7c-91e28957e228',NULL,decode('013D7D16D7AD4FEFB61BD95B765C8CEB','hex'),NULL);
 
-CREATE TABLE IF NOT EXISTS test."change_request_test_no_primary_keys" (
+CREATE TABLE IF NOT EXISTS test_e2e."change_request_test_no_primary_keys" (
   "test_numeric" NUMERIC,
   "test_text" TEXT
 );
-INSERT INTO test.change_request_test_no_primary_keys (test_numeric,test_text) VALUES
+INSERT INTO test_e2e.change_request_test_no_primary_keys (test_numeric,test_text) VALUES
 	 (238932.293,'lenny white'),
 	 (9999999,'ron e beck'),
 	 (NULL,NULL),
 	 (NULL,'charles haynes'),
 	 (123456,NULL);
 
-CREATE TABLE IF NOT EXISTS test."change_request_test_label" (
+CREATE TABLE IF NOT EXISTS test_e2e."change_request_test_label" (
   "change_request_test_id" UUID NOT NULL,
   "label" TEXT
 );
-INSERT INTO test.change_request_test_label (change_request_test_id,"label") VALUES
+INSERT INTO test_e2e.change_request_test_label (change_request_test_id,"label") VALUES
 	 ('972d6c8f-fc74-4fc1-9cad-0e03e07a9498','cool');
 
 -- Create a wide table with 170 explicitly declared columns
-DROP TABLE IF EXISTS test.large_table;
-CREATE TABLE test.large_table (
+DROP TABLE IF EXISTS test_e2e.large_table;
+CREATE TABLE test_e2e.large_table (
     id SERIAL PRIMARY KEY,
     col_1 VARCHAR(255),
     col_2 INT,
@@ -220,7 +220,7 @@ CREATE TABLE test.large_table (
 );
 
 -- Insert 200 dummy rows with NULL values in some fields
-INSERT INTO test.large_table (
+INSERT INTO test_e2e.large_table (
     col_1, col_2, col_3, col_4, col_5, col_6, col_7, col_8, col_9, col_10,
     col_11, col_12, col_13, col_14, col_15, col_16, col_17, col_18, col_19, col_20,
     col_21, col_22, col_23, col_24, col_25, col_26, col_27, col_28, col_29, col_30,
