@@ -64,17 +64,7 @@ export default async function middleware(request: Request) {
   if (webflowPages.includes(url.pathname)) {
     url.host = "webflow.sort.xyz";
     const res = await fetch(url.toString(), {
-      body: request.body,
-      cache: request.cache,
-      credentials: request.credentials,
-      headers: request.headers,
-      integrity: request.integrity,
-      keepalive: request.keepalive,
-      method: request.method,
-      mode: request.mode,
-      redirect: request.redirect,
       referrer: request.referrer,
-      referrerPolicy: request.referrerPolicy,
     });
 
     if (!res.headers.get("x-content-type-options")) {
