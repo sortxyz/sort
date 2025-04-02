@@ -14,3 +14,7 @@ pnpm exec syncpack fix-mismatches
 pnpm exec syncpack update
 ...
 ```
+
+## License
+
+[Apache License 2.0](./LICENSE)
