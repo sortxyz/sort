@@ -23,7 +23,7 @@
     "@tediousjs/connection-string": "^0.5.0",
     "fast-jwt": "^5.0.5",
     "fastify": "^4.28.1",
-    "form-data": "^4.0.1",
+    "form-data": "^4.0.4",
     "generic-pool": "^3.9.0",
     "get-jwks": "^11.0.0",
     "kysely": "^0.27.5",
