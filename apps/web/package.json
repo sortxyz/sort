@@ -29,7 +29,7 @@
     "codemirror": "6.0.1",
     "cookie": "1.0.2",
     "crypto-js": "4.2.0",
-    "diff": "7.0.0",
+    "diff": "8.0.3",
     "fast-jwt": "5.0.5",
     "get-jwks": "11.0.0",
     "isbot": "5.1.23",
